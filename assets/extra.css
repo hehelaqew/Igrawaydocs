@@ -1,0 +1,4 @@
+/* hide right-hand sidebar completely */
+.md-sidebar--secondary {
+    display: none !important;
+}

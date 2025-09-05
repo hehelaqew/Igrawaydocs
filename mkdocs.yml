@@ -1,0 +1,19 @@
+site_name: IGRAway — The Way of Infinite Liquidity
+
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.sections
+    - navigation.expand
+    - content.code.copy
+
+# only show TOC up to h2 (##), prevents left sidebar from being bloated
+markdown_extensions:
+  - toc:
+      permalink: false
+      toc_depth: 2
+
+extra_css:
+  - assets/extra.css
+
