@@ -72,9 +72,7 @@
     
       
 
-  
-
-<header class="md-header md-header--shadow" data-md-component="header">
+<header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="." title="IGRAway — The Way of Infinite Liquidity" class="md-header__button md-logo" aria-label="IGRAway — The Way of Infinite Liquidity" data-md-component="logo">
       
@@ -158,6 +156,36 @@
       
         
           
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="." class="md-tabs__link">
+        
+  
+  
+    
+  
+  IGRAway — The Way of Infinite Liquidity
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
         
       
       <main class="md-main" data-md-component="main">
@@ -171,8 +199,10 @@
                     
 
 
+  
 
-<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="." title="IGRAway — The Way of Infinite Liquidity" class="md-nav__button md-logo" aria-label="IGRAway — The Way of Infinite Liquidity" data-md-component="logo">
       
@@ -259,6 +289,24 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#2bridge-iusdc-from-igratestnet-back-to-sepolia" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.Bridge IUSDC from Igratestnet back to Sepolia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-our-security-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Our Security Design
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -311,6 +359,24 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#2bridge-iusdc-from-igratestnet-back-to-sepolia" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.Bridge IUSDC from Igratestnet back to Sepolia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-our-security-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Our Security Design
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -332,11 +398,38 @@
 <p><em>(example: 2-of-2 multisig ISM, bridging USDC from Sepolia to Igratest)</em></p>
 <p><img alt="Cross-chain process overview" src="img/crossflow.png" /></p>
 <h2 id="five-steps-to-bridge-native-usdc-from-sepolia-to-igratestnet">Five steps to bridge native USDC from Sepolia to Igratestnet</h2>
-<h3 id="11-call-the-warp-route-contract-deployed-by-our-team-on-sepolia">1.1 Call the Warp Route contract deployed by our team on Sepolia</h3>
-<h3 id="12-the-native-usdc-is-locked-in-the-warp-route-contract-after-which-the-warp-route-contract-sends-a-specially-constructed-message-to-the-mailbox-indicating-that-the-usdc-has-been-locked">1.2 The native USDC is locked in the Warp Route contract, after which the Warp Route contract sends a specially constructed message to the Mailbox indicating that the USDC has been locked</h3>
-<h3 id="13-the-running-multisig-validators-listen-to-the-messages-in-the-mailbox-after-verifying-the-validity-of-the-message-they-sign-it-and-publish-the-signatures-to-the-relayer-in-this-example-we-use-a-2-of-2-multisig-as-the-case">1.3  The running multisig validators listen to the messages in the Mailbox. After verifying the validity of the message, they sign it and publish the signatures to the relayer (in this example, we use a 2-of-2 multisig as the case).</h3>
-<h3 id="14-the-relayer-deployed-on-igratestnet-after-collecting-enough-validator-signatures-for-the-message-calls-the-process-function-of-the-mailbox-contract-on-the-igratestnet">1.4 The relayer deployed on Igratestnet, after collecting enough validator signatures for the message, calls the process function of the Mailbox contract on the Igratestnet .</h3>
-<h3 id="15-the-mailbox-contract-calls-the-ism-contract-deployed-on-igratestnet-to-verify-whether-the-message-has-been-signed-by-a-sufficient-number-of-validators-if-the-verification-passes-it-then-calls-the-warp-route-contract-deployed-on-igratest-to-mint-the-same-amount-of-iusdc-to-the-recipient">1.5 The Mailbox contract calls the ISM contract deployed on Igratestnet to verify whether the message has been signed by a sufficient number of validators. If the verification passes, it then calls the Warp Route contract deployed on Igratest to mint the same amount of iUSDC to the recipient.</h3>
+<h3 id="11-transfer-native-usdc-to-igratestnet">1.1 Transfer native USDC to Igratestnet</h3>
+<p>The user initiates the bridging process by calling the Warp Route contract deployed on Sepolia, specifying the amount of native USDC to transfer.  </p>
+<h3 id="12-lock-and-generate-message">1.2 Lock and generate message</h3>
+<p>The specified USDC is securely locked within the Warp Route contract on Sepolia. Once locked, the contract automatically generates and sends a specially constructed message to the Mailbox contract, proving that the funds are held in custody.  </p>
+<h3 id="13-verify-and-sign">1.3 Verify and sign</h3>
+<p>Independent multisig validators continuously monitor the Mailbox for new messages. After verifying the authenticity and correctness of the lock event, they sign the message. The process only continues once the required threshold of validator signatures is collected (e.g., a 2-of-2 multisig setup in this example).  </p>
+<h3 id="14-relay-the-signed-message">1.4 Relay the signed message</h3>
+<p>After gathering enough signatures, the relayer on Igratestnet forwards the signed message and proof to the Mailbox contract deployed on Igratestnet. The relayer’s role is limited to message transmission—it cannot alter or forge the message, as validity is fully enforced on-chain.  </p>
+<h3 id="15-mint-iusdc-on-igratestnet">1.5 Mint IUSDC on Igratestnet</h3>
+<p>The Mailbox contract invokes the ISM contract deployed on Igratestnet to validate the aggregated proof. Once verification succeeds, the Warp Route contract on Igratestnet mints the exact amount of IUSDC to the recipient, completing the bridge process securely.  </p>
+<h2 id="2bridge-iusdc-from-igratestnet-back-to-sepolia">2.Bridge IUSDC from Igratestnet back to Sepolia</h2>
+<h3 id="21-burn-iusdc-on-igratestnet">2.1 Burn IUSDC on Igratestnet</h3>
+<p>The user calls the Warp Route contract on Igratestnet to burn the amount of IUSDC they want to bridge back to Sepolia.</p>
+<h3 id="22-construct-bridge-back-message">2.2 Construct bridge-back message</h3>
+<p>After burning, the Warp Route contract on Igratestnet sends a message to the Mailbox contract indicating that the IUSDC has been destroyed, and that the equivalent amount of native USDC can be released on Sepolia.</p>
+<h3 id="23-verify-and-sign">2.3 Verify and sign</h3>
+<p>Independent validators listen to the Mailbox events. After confirming the burn event, they sign the message. Only when the required threshold of signatures is collected can the process continue (for example, 2-of-2 multisig in this setup).</p>
+<h3 id="24-relay-the-signed-message">2.4 Relay the signed message</h3>
+<p>The relayer forwards the signed message and aggregated proof to the Mailbox contract on Sepolia. The relayer cannot forge or alter the message, since all validity checks are enforced on-chain by the ISM.</p>
+<h3 id="25-release-native-usdc-on-sepolia">2.5 Release native USDC on Sepolia</h3>
+<p>The ISM contract on Sepolia verifies the validator signatures. Once the verification succeeds, the Warp Route contract releases the locked native USDC to the user, completing the bridge-back process securely.</p>
+<h2 id="3-our-security-design">3. Our Security Design</h2>
+<h3 id="31-validators-sign-the-message">3.1 Validators sign the message</h3>
+<p>Independent validators receive the dispatched message from the source chain. Each validator checks the authenticity and consistency of the message before signing. A message can only move forward if it collects enough independent signatures, ensuring no single validator can approve it alone.</p>
+<h3 id="32-aggregation-of-signatures">3.2 Aggregation of signatures</h3>
+<p>Validator signatures are aggregated into a cryptographic proof. This proof is cryptographically secured against forgery or modification, and it mathematically guarantees that the validator threshold has been met. The compact form of the proof improves efficiency while retaining full security guarantees.</p>
+<h3 id="33-relayer-transmits-the-proof">3.3 Relayer transmits the proof</h3>
+<p>The relayer’s role is strictly limited to transporting the signed message and aggregated proof to the destination chain. The relayer cannot alter the message, cannot fake signatures, and cannot bypass verification. Security does not depend on the honesty of relayers, since all validation happens on-chain.</p>
+<h3 id="34-on-chain-verification-by-the-ism">3.4 On-chain verification by the ISM</h3>
+<p>On the destination chain, the Interchain Security Module (ISM) executes verification entirely on-chain. The ISM validates the aggregated proof against the configured security model (e.g., multisig, light client). Because this verification is performed natively on the blockchain, no off-chain trust is required, and any invalid or tampered proof is automatically rejected.</p>
+<h3 id="35-message-execution">3.5 Message execution</h3>
+<p>Only after the ISM confirms the validity of the proof does the target application contract execute the message. This strict gating ensures that execution is fully dependent on on-chain security checks, making it impossible for relayers or other off-chain actors to manipulate the process. Every execution is transparent and auditable directly on-chain.</p>
 
 
 
@@ -385,7 +478,7 @@
     
     
       
-      <script id="__config" type="application/json">{"base": ".", "features": ["navigation.sections", "navigation.expand", "content.code.copy"], "search": "assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": ".", "features": ["navigation.sections", "navigation.expand", "navigation.tabs"], "search": "assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="assets/javascripts/bundle.92b07e13.min.js"></script>
